@@ -1,0 +1,40 @@
+body {
+	color:#1F1409;
+	font-family:"Lucida Sans Unicode",Verdana,"Lucida Grande",sans-serif;
+	font-size:15px;
+	font-size-adjust:none;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:1.5em;
+}
+img {
+	border: 0px;
+}
+.small {
+	color:#858585;
+	font-size:12px;
+	font-weight:normal;
+}
+.dash-bar  a{
+	background: #0063DC none repeat scroll 0% 50%;
+	color:#FFFFFF;
+}
+.gbar {
+	width: 100%;
+	padding: 0pt 0pt 4px;
+	font-size: 84%;
+}
+
+#footer {
+	text-align: center
+}
+
+#poke {
+	background: #0063DC none repeat scroll 0% 50%;
+	color:#FFFFFF;
+}
+
+#cooked-reciepe div {
+border-top:1px solid #E6E6E6;
+}

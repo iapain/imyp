@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %} Listening - {{ user_focus }} {% endblock %}
+{% block content %}
+<h2> listening </h2><div id="poke-bar" class="link"><a href="javascript:;" id="poke">Poke!</a></div>
+{% if force %}
+        {% if auth %}
+        {% if write %}
+<form>
+    <div id="save-form">
+    <input id="url" type="text" name="url" value="http://" size="75" /> <input type="button" id="get-data" value="Save Feed" />
+    </div>
+	<div class="small">You can add your last.fm rss feed e.g http://ws.audioscrobbler.com/1.0/user/GiannaMichelle/recenttracks.rss</div>
+    </form>
+	<div id="cooked-reciepe">
+        
+    </div>
+        {% endif %}
+        {% endif %}
+{% else %}
+        {% if auth %}
+        {% if write %}
+<form>
+    <div id="save-form">
+    <input id="url" type="text" name="url" value="{{ feed_url }}" size="75" /> <input type="button" id="get-data" value="Save Feed" />
+    </div>
+	<div class="small">You can add your last.fm rss feed e.g http://ws.audioscrobbler.com/1.0/user/GiannaMichelle/recenttracks.rss</div>
+    </form>
+        {% endif %}
+        {% endif %}
+<div id ="cooked-reciepe">
+        {% for dat in data %}
+        <div><img src="/icon/{{ dat.key }}/?pkey" alt="icon" /> <a href="{{ dat.link }}">{{ dat.title }}</a>
+                <div class="small">{{ dat.type.verbose_title }} {{ dat.item_date|timesince }} ago</div>
+                <p>{{ dat.media_src }}</p>
+        </div>
+        {% endfor %}
+{% endif %}
+
+{% endblock %}
+
+{% block ljs %}
+<script type="text/JavaScript">
+ $(document).ready(function(){
+   $("#get-data").click(function(){
+     var cnt = 0;
+	 humanMsg.displayMsg('Please wait! we are cooking for you...');
+     $.post("/parse/listening/",{
+        url:$("#url").val()
+        }, function(data) {
+		$("#cooked-reciepe").html('');
+        $.each(data.items, function(i,item){
+			cnt++;
+            $("<div>").html("<img src='" + item.icon + "' alt='icon' />  <a href='" + item.link + "'>" + item.title + "<\/a><div class='small'>" + item.date + " ago<\/div><p>" + item.src + "<\/p>").appendTo("#cooked-reciepe");
+			
+            
+        });
+		humanMsg.displayMsg('We have cooked ' + cnt + ' reciepes for you!');
+     }, "json");
+   });
+   
+   $("#poke").click(function(){
+     var cnt = 0;
+	 humanMsg.displayMsg('Please wait! Poking ..');
+     $.post("/poke/listening/{{ user_focus }}/",{
+        url:$("#url").val()
+        }, function(data) {
+		$("#cooked-reciepe").html('');
+        $.each(data.items, function(i,item){
+			cnt++;
+            $("<div>").html("<img src='" + item.icon + "' alt='icon' />  <a href='" + item.link + "'>" + item.title + "<\/a><div class='small'>" + item.date + " ago<\/div><p>" + item.src + "<\/p>").appendTo("#cooked-reciepe");
+			
+            
+        });
+		humanMsg.displayMsg('Poked! found ' + cnt + ' reciepes for you!');
+     }, "json");
+   });
+   
+ });
+ </script>
+{% endblock %}
