@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %} Search {{ q }} {% endblock %}
+{% block tabs %} {% endblock %}
+{% block content %}
+<div id="poke">
+Searched for "{{ q }}" - Displaying {{ start }} - {{ end }} of about {{ total }} results
+</div>
+<div id="results">
+	{% for item in items %}
+	<p>
+	<div id="result">
+	<div id="heading"><img src="/icon/{{ item.key }}/?pkey" /><a href="{{ item.link }}">{{ item.title }}</a></div>
+	<div class="small">{{ item.type.verbose_title }} {{ item.item_date|timesince }} ago by {{ item.user }}</div>
+	<div>{{ item.media_src|truncatewords:50 }}</div>
+	<div id="small-link">{{ item.link }} - <a href="/~{{ item.user }}/">{{ item.user }}</div>
+	</div>
+	</p>
+	{% endfor %}
+	{% if has_prev %}
+	<a href="?q={{ q }}&start={{ prev }}"> < Prev</a> 
+	{% endif %}
+	{% if has_next %}
+	<a href="?q={{ q }}&start={{ end }}">Next > </a>
+	{% endif %}
+</div>
+{% endblock %}

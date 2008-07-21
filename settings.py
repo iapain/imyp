@@ -17,6 +17,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
 )
 
+
 INSTALLED_APPS = (
     'imyp'
 )

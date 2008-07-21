@@ -25,7 +25,15 @@ img {
 	padding: 0pt 0pt 4px;
 	font-size: 84%;
 }
-
+#heading {
+	font-size:17px;
+	font-weight:200;
+}
+#small-link {
+	color:green;
+	font-size:12px;
+	font-weight:normal;
+}
 #footer {
 	text-align: center
 }

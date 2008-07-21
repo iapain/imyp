@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <title>Invade my privacy - {% block title %}{% endblock %}</title>
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	{% block extrahead %} {% endblock %}
 	<link href="/static/css/humanmsg.css" media="screen" type="text/css" rel="stylesheet">
 	<link href="/static/css/imyp.css" media="screen" type="text/css" rel="stylesheet">
 	<script src="/static/js/jquery-1.2.6.min.js" type="text/javascript"></script>
@@ -12,15 +14,26 @@
 
 {% endblock %}
 <body>
+	{% block userbar %}
     <div align="right" class="gbar" id="user">
         {% if auth %}
-            <b>{{ user }}</b> |  <a href="/u/writing/{{ user }}/">Dashboard</a> | <a href="/~{{ user }}/" title="/~{{ user }}/">Public URL</a> | <a href="/" title="Home">Home</a> | <a href="{{ signout }}">Sign out</a>
+            <b>{{ user }}</b> |  <a href="/u/writing/{{ user }}/">Dashboard</a> | {% if newtab %} <a href="/whatisnew/" style="color:red;"><b>What is new?</b></a> | {% endif %}<a href="/~{{ user }}/" title="/~{{ user }}/">Public URL</a> | <a href="/" title="Home">Home</a> | <a href="/search?q=">Browse</a> | <a href="{{ signout }}">Sign out</a>
         {% else %}
-            <a href="{{ signin }}">Sign In</a> | <a href="/" title="Home">Home</a> | <a href="{{ signin }}">Register</a>
+            <a href="{{ signin }}">Sign In</a> | <a href="/" title="Home">Home</a> | {% if newtab %} <a href="/whatisnew/" style="color:red;"><b>What is new?</b></a> | {% endif %}<a href="/search?q=">Browse</a> | <a href="{{ signin }}">Register</a>
         {% endif %}
     </div>
+	{% endblock %}
+	{% block searchbar %}
+	<form method="GET" action="/search">
+	Search for <input type="text" size="60" name="q" value="{{ q }}" /><input type="submit" name="btn" value=" Search " /> | <a href="/search?q=">Browse Latest</a>
+	</form>
+	{% endblock %}
     {% block tabs %}
-	<h3> {{ user_focus }} - <a href="/u/reading/{{ user_focus }}/">Reading</a> | <a href="/u/writing/{{ user_focus }}/">Writing</a> | <a href="/u/viewing/{{ user_focus }}/">Viewing</a> | <a href="/u/listening/{{ user_focus }}/">Listening</a> <h3>{% endblock %}
+	<h3> {{ user_focus }} 
+	{% for item in types %}
+		| <a href="/u/{{ item.title }}/{{ user_focus }}/">{{ item.tab_title }}</a>
+	{% endfor %}
+	<h3>{% endblock %}
     {% block content %} {% endblock %}
 	{% block footer %} 
 	<div class="small" id="footer">
@@ -28,9 +41,9 @@
 	<div>
 	<img border="0" alt="Powered by Google App Engine" src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif"/>
 	</div>
-	<div>If I had a <a href="http://www.djangoproject.com/"><img height="25" width="65" align="top" alt="django" src="http://media.jacobian.org/new/im/django.gif"/></a>, I'd <a href="http://www.djangoproject.com/"><img height="25" width="65" align="top" alt="django" src="http://media.jacobian.org/new/im/django.gif"/></a> in the morning </p>
+	<div><p>{{ quote }}</p></div>
 	</div>
-	</div>
+	<div class="small" align="right">This is {{ product }}(r{{ revision }})</div>
 	{% endblock %}
 </body>
 {% block ljs %}
