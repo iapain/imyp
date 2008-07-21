@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %} What been keeping me busy? :) {% endblock %}
+{% block searchbar %}{% endblock %}
+{% block tabs %} {% endblock %}
+{% block content %}
+{% for news in newsitems %}
+<div>
+	<div>{{ news.title }}</div>
+	<div class="small">Added {{ news.created_on|timesince }} ago</div>
+    {{ news.text }}
+</div>
+{% endfor %}
+{% endblock %}

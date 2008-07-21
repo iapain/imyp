@@ -13,14 +13,58 @@ indexes:
 # Used once in query history.
 - kind: UserItem
   properties:
+  - name: __searchable_text_index
+  - name: __searchable_text_index
+  - name: __searchable_text_index
+  - name: item_date
+    direction: desc
+
+# Used 5 times in query history.
+- kind: UserItem
+  properties:
+  - name: __searchable_text_index
+  - name: __searchable_text_index
+  - name: item_date
+    direction: desc
+
+# Used 47 times in query history.
+- kind: UserItem
+  properties:
+  - name: __searchable_text_index
+  - name: item_date
+    direction: desc
+
+# Used 126 times in query history.
+- kind: UserItem
+  properties:
+  - name: item_date
+    direction: desc
+
+# Used 4 times in query history.
+- kind: UserItem
+  properties:
+  - name: title
+  - name: item_date
+    direction: desc
+
+# Used once in query history.
+- kind: UserItem
+  properties:
   - name: type
   - name: item_date
     direction: desc
 
-# Used 478 times in query history.
+# Used 568 times in query history.
 - kind: UserItem
   properties:
   - name: type
+  - name: user
+  - name: item_date
+    direction: desc
+
+# Used 21 times in query history.
+- kind: UserItem
+  properties:
   - name: user
   - name: item_date
     direction: desc

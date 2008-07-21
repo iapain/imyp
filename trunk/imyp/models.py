@@ -1,6 +1,9 @@
 from google.appengine.ext import db
+from google.appengine.ext import search 
 from django import newforms as forms
+import random
 
+random.seed(100)
 ### GQL query cache ###
 
 
@@ -47,6 +50,9 @@ class Account(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     modified = db.DateTimeProperty(auto_now=True)
     
+    def get_absolute_url(self):
+        return 'http://imyp.appspot.com/~%s/' % (self.user)
+    
     @classmethod
     def get_account_for_user(cls, user):
         """Get the Account for a user, creating a default one if needed."""
@@ -67,7 +73,34 @@ class Account(db.Model):
         return cls.get_by_key_name(key)
 
 
-
+class RadomQuotes(db.Model):
+    title = db.StringProperty(required=True)
+    created_on = db.DateTimeProperty(auto_now_add = True)
+    
+    @classmethod
+    def add_quote(cls, text):
+        cls = RadomQuotes(title=text) 
+        cls.save()
+        return cls
+    
+    @classmethod
+    def get_random_quote(cls):
+        a = cls.all()
+        try:
+            n = random.randint(0, a.count() - 1)
+            return a[n].title.replace('Django', '<img height="25" width="65" align="top" alt="django" src="http://media.jacobian.org/new/im/django.gif"/>')
+        except ValueError:
+            if a.count() == 0:
+                b = cls.add_quote("I Love Django")
+            else:
+                b = a[0]
+            return b.title.replace('Django', '<img height="25" width="65" align="top" alt="django" src="http://media.jacobian.org/new/im/django.gif"/>')
+ 
+class NewsItem(db.Model):
+    title = db.StringProperty(required=True)
+    text = db.StringProperty(required=True)
+    created_on = db.DateTimeProperty(auto_now_add = True)
+    
     
 class UserItem(db.Model):
     type = db.ReferenceProperty(Item)

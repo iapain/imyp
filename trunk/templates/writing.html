@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block title %} Writing - {{ user_focus }} {% endblock %}
+{% block searchbar %}{% endblock %}
 {% block content %}
-<h2> Writing </h2><div id="poke-bar" class="link"><a href="javascript:;" id="poke">Poke!</a></div>
+<h2> writing </h2><div id="poke-bar" class="link"><a href="javascript:;" id="poke">Poke!</a></div>
 {% if force %}
         {% if auth %}
         {% if write %}
