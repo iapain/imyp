@@ -31,6 +31,7 @@ class Item(db.Model):
     title = db.StringProperty(required=True)
     tab_title = db.StringProperty(required=True)
     verbose_title = db.StringProperty(required=True)
+    help_text = db.StringProperty()
     created_on = db.DateTimeProperty(auto_now_add = True)
     
 class UserFeed(db.Model):

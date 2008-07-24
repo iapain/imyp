@@ -17,9 +17,9 @@
 	{% block userbar %}
     <div align="right" class="gbar" id="user">
         {% if auth %}
-            <b>{{ user }}</b> |  <a href="/u/writing/{{ user }}/">Dashboard</a> | {% if newtab %} <a href="/whatisnew/" style="color:red;"><b>What is new?</b></a> | {% endif %}<a href="/~{{ user }}/" title="/~{{ user }}/">Public URL</a> | <a href="/" title="Home">Home</a> | <a href="/search?q=">Browse</a> | <a href="{{ signout }}">Sign out</a>
+            <b>{{ user }}</b> |  <a href="/u/writing/{{ user }}/">Dashboard</a> | {% if newtab %} <a href="/whatisnew/" style="color:red;"><b>What's new?</b></a> | {% endif %}<a href="/~{{ user }}/" title="/~{{ user }}/">Public URL</a> | <a href="/" title="Home">Home</a> | <a href="/search?q=">Browse</a> | <a href="{{ signout }}">Sign out</a>
         {% else %}
-            <a href="{{ signin }}">Sign In</a> | <a href="/" title="Home">Home</a> | {% if newtab %} <a href="/whatisnew/" style="color:red;"><b>What is new?</b></a> | {% endif %}<a href="/search?q=">Browse</a> | <a href="{{ signin }}">Register</a>
+            <a href="{{ signin }}">Sign In</a> | <a href="/" title="Home">Home</a> | {% if newtab %} <a href="/whatisnew/" style="color:red;"><b>What's new?</b></a> | {% endif %}<a href="/search?q=">Browse</a> | <a href="{{ signin }}">Register</a>
         {% endif %}
     </div>
 	{% endblock %}
@@ -29,21 +29,21 @@
 	</form>
 	{% endblock %}
     {% block tabs %}
-	<h3> {{ user_focus }} 
+	<h3> <span class="black-link"><a href="/~{{ user_focus }}/" title="{{ user_focus }} Home">{{ user_focus }}</a></span>
 	{% for item in types %}
 		| <a href="/u/{{ item.title }}/{{ user_focus }}/">{{ item.tab_title }}</a>
-	{% endfor %}
-	<h3>{% endblock %}
+	{% endfor %} | <a href="/feeds/{{ user_focus}}/"><img src="/static/images/feed-icon.png" alt="Atom feed" border="0" /></a>
+	</h3>{% endblock %}
     {% block content %} {% endblock %}
 	{% block footer %} 
-	<div class="small" id="footer">
+	<div id="footer" class="small">
 	2008 Invade my privacy! huh? - iapain--nospam--gmail.com  - <a href="/~iapain/" title="Invade into my privacy ;)">Privacy Policy</a> - <a href="javascript:alert('Sorry! no donuts for you - Mr. Orkut said! Perhaps we dont have any T and C');">Terms and condition</a> - <a rel="nofollow" href="http://www.netatty.com/privacy/privacy.html">Privacy Law</a>
 	<div>
 	<img border="0" alt="Powered by Google App Engine" src="http://code.google.com/appengine/images/appengine-noborder-120x30.gif"/>
 	</div>
 	<div><p>{{ quote }}</p></div>
-	</div>
 	<div class="small" align="right">This is {{ product }}(r{{ revision }})</div>
+	</div>
 	{% endblock %}
 </body>
 {% block ljs %}

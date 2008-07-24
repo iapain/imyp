@@ -3,11 +3,12 @@
 {% block searchbar %}{% endblock %}
 {% block tabs %} {% endblock %}
 {% block content %}
+<h3>What's new here?</h3>
 {% for news in newsitems %}
-<div>
+<div id ="cooked-reciepe">
 	<div>{{ news.title }}</div>
 	<div class="small">Added {{ news.created_on|timesince }} ago</div>
     {{ news.text }}
-</div>
+</div><br />
 {% endfor %}
 {% endblock %}

@@ -83,7 +83,7 @@ def respond(request, template, params=None):
     params['signin'] = users.create_login_url(request.path)
     params['signout'] = users.create_logout_url(request.path)
     params['product'] = 'imyp'
-    params['revision'] = '52'
+    params['revision'] = '56'
     params['stage'] = 'alpha'
     try:
         return render_to_response(template, params)
@@ -128,15 +128,16 @@ def icon(request, key):
         u = UserItem.get(key)
     else:
         u = UserItem.get_by_key_name(key)
-    return HttpResponse(u.icon.icon_src, "image/jpg")
+    return HttpResponse(u.icon.icon_src, "image/x-icon")
 
 @admin_required
 def initial(request):
     """Initialized inital data"""
-    a = Item.get_or_insert("writing", title="writing", tab_title="Writing", verbose_title="Written")
-    a = Item.get_or_insert("listening", title="listening", tab_title="Listening", verbose_title="Listened")
-    a = Item.get_or_insert("viewing", title="viewing", tab_title="Viewing", verbose_title="Viewed")
-    a = Item.get_or_insert("reading", title="reading", tab_title="Reading", verbose_title="Read")
+    a = Item.get_or_insert("reading", title="reading", tab_title="Reading", verbose_title="Read", help_text="You can add your bookmark or del.icio.us, digg or readit feed here e.g <i>http://feeds.delicious.com/rss/iapain</i> or anywhere else you'r reading something.")
+    a = Item.get_or_insert("writing", title="writing", tab_title="Writing", verbose_title="Written", help_text="You can add your blog feed here e.g <i>http://whereisdeepak.wordpress.com/feed/</i> or anywhere else you'r writing something.")
+    a = Item.get_or_insert("listening", title="listening", tab_title="Listening", verbose_title="Listened", help_text="You can add your audio or Last.fm feed here e.g <i>http://ws.audioscrobbler.com/1.0/user/GiannaMichelle/recenttracks.rss</i> or anywhere else you'r listening something.")    
+    a = Item.get_or_insert("viewing", title="viewing", tab_title="Viewing", verbose_title="Taken", help_text="You can add your picture, flickr or picasa feed here e.g <i>http://api.flickr.com/services/feeds/photos_public.gne?id=65645030@N00&lang=en-us&format=rss_200 etc</i> or anywhere else you'r posting pictures.")
+    #a = Item.get_or_insert("twitting", title="twitting", tab_title="Twitting", verbose_title="Twitted", help_text="You can add your Twitter feed here.")
     a = NewsItem.get_or_insert("first", title='We just fixed empty news item bug', text='Empty table never gets created in appengine, somewhat it sucks :(')
     return HttpResponse("Done")
 
@@ -187,11 +188,22 @@ def dispatcher(request, method, user=None, type=None):
         feed_url = feed[0].feed_url
     if len(data) == 0:
         force_add = True
-    return respond(request, "generic.html", {'data': data, 'user_focus': user, 'force':force_add, 'feed_url':feed_url, 'event': method})
+    ht = Item.get_by_key_name(method).help_text
+    return respond(request, "generic.html", {'data': data, 'user_focus': user, 'force':force_add, 'feed_url':feed_url, 'event': method, 'help_text':ht})
 
 
-def user_handler(request, user):
-    return HttpResponseRedirect('/u/writing/%s/' % user)
+def user_handler(request, user, template="user_home.html"):
+    N = 50
+    if not '@' in user:
+            user += "@gmail.com"
+    ac = Account.get_account_for_email(user)
+    user = ac.user
+    if ac is None:
+        raise Http404
+    tp = Item.get_by_key_name("listening")
+    data = UserItem.all().filter('user = ', user).order('-item_date')[:N]
+    featured, feed = _generic_data_adapter("writing", user, 1)
+    return respond(request, template, {'featured':featured, 'data':data, 'user_focus':user})
 
 def poke(request, type_name, user):
     "fetch, parse and insert into DB"
@@ -408,7 +420,6 @@ def generate_rss(request, user):
     if not '@' in user:
             user += "@gmail.com"
     user = Account.get_account_for_email(user)
-    tp = Item.get_by_key_name("reading")
     if user is None:
         raise Http404
     rss = """<?xml version="1.0" encoding="utf-8" standalone="yes"?>
@@ -426,10 +437,10 @@ def generate_rss(request, user):
     data = UserItem.all().filter('user = ', user.user).order('-item_date')[:100]
     for item in data:
         rss += '    <entry>\n'
-        rss += '        <title>%s</title>\n' % no_ugly_tags(item.title)
-        rss += '        <link rel="alternate" type="text/html"  href="%s" />\n' % item.link
-        rss += '        <id>tag:inmy.appspot.com,2008:/read/%(key)s/%(user)s/</id>\n' % {'user':item.user, 'key':item.key()}
-        rss += '        <content type="html">%s</content>\n' % no_ugly_tags(item.media_src[:500])
+        rss += '        <title>%s</title>\n' % escape(item.title)
+        rss += '        <link rel="alternate" type="text/html"  href="%s" />\n' % escape(item.link)
+        rss += '        <id>tag:inmy.appspot.com,%(year)s:/read/%(key)s/%(user)s/</id>\n' % {'user':item.user, 'key':item.key(), 'year':datetime.datetime.now().strftime("%Y")}
+        rss += '        <content type="html">%s</content>\n' % escape(item.media_src[:500])
         rss += '        <category term="%s" scheme="http://imyp.appspot.com/schema/" />\n' % item.type.verbose_title
         rss += '        <author><name>%(user)s</name><uri>http://imyp.appspot.com/~%(user)s/</uri></author>\n' % {'user':item.user}
         rss += '        <published>%s</published>\n' % item.item_date.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -443,8 +454,8 @@ def news(request, template="news.html"):
     return respond(request, template, {'newsitems':news})
 
 
-def no_ugly_tags(text):
-    return text.replace('&', 'amp;').replace('<', '&lt;').replace('>', '&gt;')
+def escape(text):
+    return text.replace('&', 'amp;').replace('<', '&lt;').replace('>', '&gt;').replace("'", '&#39;').replace('"', "&quot;")
 '''
 class UserRSSFeed(Feed):
     def get_object(self, bits):

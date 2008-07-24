@@ -54,7 +54,7 @@ indexes:
   - name: item_date
     direction: desc
 
-# Used 568 times in query history.
+# Used 616 times in query history.
 - kind: UserItem
   properties:
   - name: type
@@ -62,7 +62,7 @@ indexes:
   - name: item_date
     direction: desc
 
-# Used 21 times in query history.
+# Used 64 times in query history.
 - kind: UserItem
   properties:
   - name: user
