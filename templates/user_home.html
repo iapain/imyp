@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %} {{ user_focus }} - Home {% endblock %}
+{% block extrahead %}<link rel="alternate" type="application/atom+xml" title="Invade {{ user_focus }} privacy" href="/feeds/{{ user_focus}}/" />{% endblock %}
+
+{% block searchbar %}{% endblock %}
+{% block content %}
+<div id="content" class="float-left">
+<h2>What's {{ user_focus }} been up to?</h2>
+{% for dat in data %}
+<div><img src="/icon/{{ dat.key }}/?pkey" /> <a href="{{ dat.link }}">{{ dat.title }}</a>
+                <div class="small">{{ dat.type.verbose_title }} {{ dat.item_date|timesince }} ago</div>
+                <p>{{ dat.media_src }}</p>
+        </div>
+{% endfor %}
+</div>
+<div id="featured" class="float-right">
+{% for dat in featured %}
+<h2>Featured Article</h2>
+<h3><img src="/icon/{{ dat.key }}/?pkey" /> <a href="{{ dat.link }}">{{ dat.title|truncatewords:"5" }}</a></h3>
+                <div class="small">{{ dat.type.verbose_title }} {{ dat.item_date|timesince }} ago</div>
+                <p>{{ dat.media_src }} ... <a href="{{ dat.link }}">more</a></p>
+{% endfor %}
+</div>
+{% endblock %}

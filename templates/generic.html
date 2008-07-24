@@ -12,8 +12,7 @@
     <div id="save-form">
     <input id="url" type="text" name="url" value="http://" size="75" /> <input type="button" id="get-data" value="Save Feed" />
     </div>
-	<div class="small">If you bookmark, listen, blog, flickr something then you can upload your activity log here e.g <i>http://feeds.delicious.com/rss/iapain</i>
-	or <i>http://ws.audioscrobbler.com/1.0/user/GiannaMichelle/recenttracks.rss</i> or <i>http://whereisdeepak.wordpress.com/feed/</i> or <i>http://api.flickr.com/services/feeds/photos_public.gne?id=65645030@N00&lang=en-us&format=rss_200</i> etc</div>
+	<div class="small">{{ help_text }}</div>
     </form>
 	<div id="cooked-reciepe"> 
     </div>
@@ -27,8 +26,7 @@
     <div id="save-form">
     <input id="url" type="text" name="url" value="{{ feed_url }}" size="75" /> <input type="button" id="get-data" value="Save Feed" />
     </div>
-	<div class="small">If you bookmark, listen, blog, flickr something then you can upload your activity log here e.g <i>http://feeds.delicious.com/rss/iapain</i>
-	or <i>http://ws.audioscrobbler.com/1.0/user/GiannaMichelle/recenttracks.rss</i> or <i>http://whereisdeepak.wordpress.com/feed/</i> or <i>http://api.flickr.com/services/feeds/photos_public.gne?id=65645030@N00&lang=en-us&format=rss_200</i> etc</div></form>
+	<div class="small">{{ help_text }}</div></form>
     
         {% endif %}
         {% endif %}
@@ -48,7 +46,7 @@
  $(document).ready(function(){
    $("#get-data").click(function(){
      var cnt = 0;
-	 humanMsg.displayMsg('Please wait! we are cooking for you...');
+	 humanMsg.displayMsg('Please wait! Munching Feed .. yummy ...');
      $.post("/parse/{{ event }}/",{
         url:$("#url").val()
         }, function(data) {
@@ -59,13 +57,13 @@
 			
             
         });
-		humanMsg.displayMsg('We have cooked ' + cnt + ' reciepes for you!');
+		humanMsg.displayMsg('Digested ' + cnt + ' donuts for you! Yummyyyy :)');
      }, "json");
    });
    
    $("#poke").click(function(){
      var cnt = 0;
-	 humanMsg.displayMsg('Please wait! Poking ..');
+	 humanMsg.displayMsg('Please wait! Munching Feed .. yummy ...');
      $.post("/poke/{{ event }}/{{ user_focus }}/",{
         url:$("#url").val()
         }, function(data) {
@@ -76,7 +74,7 @@
 			
             
         });
-		humanMsg.displayMsg('Poked! found ' + cnt + ' reciepes for you!');
+		humanMsg.displayMsg('Digested ' + cnt + ' donuts for you! Yum Yum Yum :)');
      }, "json");
    });
    

@@ -25,6 +25,24 @@ img {
 	padding: 0pt 0pt 4px;
 	font-size: 84%;
 }
+.float-left {
+	margin-right:8px;
+	width:572px;
+	display:inline;
+	float:left;
+	border-right:1px solid #E6E6E6;
+}
+.float-right {
+	margin-left:8px;
+	width:376px;
+	display:inline;
+	float:left;
+	border:3px solid #E6E6E6;
+}
+.black-link  a{
+	color: #000000;
+	font-weight:200;
+}
 #heading {
 	font-size:17px;
 	font-weight:200;
@@ -35,7 +53,10 @@ img {
 	font-weight:normal;
 }
 #footer {
-	text-align: center
+	text-align: center;
+	display:inline;
+	float:left;
+	width: 100%;
 }
 
 #poke {
